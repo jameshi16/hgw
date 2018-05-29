@@ -29,11 +29,19 @@ final public class Game {
     private Servant playerServant = null; //the current servant.
 
     /* Methods */
-    public Boolean loadServant(Servant servant) { //loads a servant into the game
+    public Boolean loadServant(final Servant servant) { //loads a servant into the game
         try {
-            throneOfHeros.add(servant); //adds the servant into the thing
+            throneOfHeros.add(servant); //adds the servant into the thrones
         }
         catch (Exception e) {return false;} //don't handle exceptions
+        return true;
+    }
+
+    public Boolean loadServant(final List<Servant> servants) { //loads a collection of servants into the game
+        try {
+            throneOfHeros.addAll(servants); //adds all the servants in the collection into the thrones
+        }
+        catch (Exception e) {return false;}
         return true;
     }
 

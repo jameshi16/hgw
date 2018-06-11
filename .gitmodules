@@ -1,3 +1,6 @@
 [submodule "gson"]
 	path = gson
 	url = https://github.com/google/gson.git
+[submodule "log4j2"]
+	path = log4j2
+	url = git@github.com:apache/logging-log4j2.git

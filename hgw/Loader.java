@@ -1,6 +1,7 @@
 package hgw;
 
 import hgw.servant.*;
+import hgw.errors.HGWIOError;
 
 import com.google.gson.Gson;
 
@@ -22,12 +23,12 @@ public class Loader {
     Returns null if no servants found in the filesystem
     */
     @SafeVarargs //checked, should be okay
-    public static LinkedList<Servant> loadServants(String directory, Class<? extends Servant>... classes) throws IOException {
+    public static LinkedList<Servant> loadServants(String directory, Class<? extends Servant>... classes) throws IOException, HGWIOError {
         LinkedList<Servant> l_servants = new LinkedList<Servant>();
         Path rootDir = FileSystems.getDefault().getPath(directory);
         
         if (!Files.isDirectory(rootDir)) //checks if the Servants directory exist
-            return null; //returns null if there is no directory
+            throw new HGWIOError("The ./Servants/ directory does not exist. Try running the program with the --configure flag.");
 
         Gson gson = new Gson(); //used for the entire loop below
 

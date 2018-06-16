@@ -1,5 +1,8 @@
 package hgw;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import hgw.servant.*;
 import hgw.errors.HGWIOError;
 
@@ -17,6 +20,7 @@ import java.util.List;
 import java.lang.Class;
 
 public class Loader {
+    private static final Logger logger = LogManager.getLogger("HGW-Loader");
     /**
     Load the servants from the filesystem.
     directory - The directory to search all the servants from.
@@ -34,7 +38,10 @@ public class Loader {
 
         for (Class<? extends Servant> c : classes) //for every class found in the array of classes
             try (DirectoryStream<Path> stream = Files.newDirectoryStream(rootDir.resolve(c.getSimpleName()))) { //create dir stream
-                for (Path path : stream) l_servants.push(gson.fromJson(new String(Files.readAllBytes(path)), c)); //adds the loaded servant into the list
+                for (Path path : stream) {
+                    logger.info("Memorizing servant: ", path);
+                    l_servants.push(gson.fromJson(new String(Files.readAllBytes(path)), c)); //adds the loaded servant into the list
+                }
             } catch (NoSuchFileException exception) {}
 
         return l_servants;
@@ -63,6 +70,7 @@ public class Loader {
             if (!Files.isDirectory(dir_path_servant)) //checks if the Servants directory exist
                 Files.createDirectory(dir_path_servant);
 
+            logger.info("Saving ", servant.getClass().getSimpleName() ,"-class servant to disk: ", servant.getName());
             Files.write(dir_path_servant.resolve(servant.getName() + ".json"), gson.toJson(servant).getBytes(), StandardOpenOption.CREATE); //writes
         }
     }
